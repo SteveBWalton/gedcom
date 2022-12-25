@@ -1,5 +1,5 @@
 // Module to define the 'Person' class.
-// Rust does have obejcts!
+// Rust does not have classes!
 
 // Members variables for the 'Person' class.
 pub struct Person {
