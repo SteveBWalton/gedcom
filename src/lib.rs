@@ -1,5 +1,7 @@
 // Attempt create a library that will expose a family tree object library from a gedcom file.
+use std::io::BufRead;
 
+// Application modules.
 mod person;
 
 // Member variables for the FamilyTree class.
@@ -21,6 +23,32 @@ impl FamilyTree {
 
     // Open a gedcom file and create objects from it.
     pub fn open(&mut self, file_name: &str) {
+        match std::fs::File::open(file_name) {
+            Ok(file) => {
+                let reader = std::io::BufReader::new(file);
+
+                for line_or_error in reader.lines() {
+                    match line_or_error {
+                        Ok(line) => {
+                            if line.starts_with('0') {
+                                println!("{}", line);
+                            }
+                        }
+
+                        Err(error) => {
+                            println!("Error with line.");
+                            println!("{}", error);
+                        }
+                    }
+                }
+            }
+
+            Err(error) => {
+                println!("Error opening {}", file_name);
+                println!("{}", error);
+            }
+
+        }
     }
 }
 
@@ -33,7 +61,7 @@ mod tests {
     #[test]
     fn it_works() {
         let mut result = FamilyTree::new();
-        result.open("test_file.gedcom");
+        result.open("/home/steve/Documents/Personal/Family Tree/walton.ged");
         assert_eq!(result.people.len(), 1);
     }
 }
