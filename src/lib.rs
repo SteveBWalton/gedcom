@@ -4,6 +4,13 @@ use std::io::BufRead;
 // Application modules.
 mod person;
 
+enum GedComObjects {
+    Individual,
+    Family,
+    Media,
+    Unknown,
+}
+
 // Member variables for the FamilyTree class.
 pub struct FamilyTree {
     pub people: Vec<person::Person>
@@ -21,17 +28,56 @@ impl FamilyTree {
         FamilyTree{people: people}
     }
 
+
+
+    pub fn add_individual(&mut self, gedcom: &Vec<String>) {
+        println!("add_individual()");
+        for line in gedcom {
+            println!("\t{}", line);
+        }
+    }
+
+
+
     // Open a gedcom file and create objects from it.
     pub fn open(&mut self, file_name: &str) {
         match std::fs::File::open(file_name) {
             Ok(file) => {
                 let reader = std::io::BufReader::new(file);
+                let mut object_lines: Vec<String> = Vec::new();
+                let mut object_type: GedComObjects = GedComObjects::Unknown;
 
                 for line_or_error in reader.lines() {
                     match line_or_error {
                         Ok(line) => {
                             if line.starts_with('0') {
-                                println!("{}", line);
+                                // Deal with the exsting object.
+                                if object_lines.len() != 0 {
+                                    match object_type {
+                                        GedComObjects::Individual => {
+                                            println!("\tIndividual Object.");
+                                            self.add_individual(&object_lines);
+                                        }
+                                        _ => {
+                                            println!("\tUnknown Object.");
+                                        }
+                                    }
+                                }
+
+                                // Start a new object.
+                                object_lines = Vec::new();
+                                if line.ends_with("INDI") {
+                                    object_type = GedComObjects::Individual;
+                                } else if line.ends_with("FAM") {
+                                    object_type = GedComObjects::Family;
+                                } else {
+                                    object_type = GedComObjects::Unknown;
+                                }
+                                object_lines.push(line);
+                            }
+                            else
+                            {
+                                object_lines.push(line);
                             }
                         }
 
