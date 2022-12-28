@@ -13,7 +13,8 @@ enum GedComObjects {
 
 // Member variables for the FamilyTree class.
 pub struct FamilyTree {
-    pub people: Vec<person::Person>
+    pub people: Vec<person::Person>,
+    pub families: Vec<i32>,             // Change to family::Family
 }
 
 // Methods for the FamilyTree class.
@@ -21,11 +22,12 @@ impl FamilyTree {
     // Create a new 'FamilyTree' structure.
     pub fn new() -> FamilyTree {
         let mut people = Vec::new();
+        let mut families = Vec::new();
 
         let my_person = person::Person{first_name: "Steve".to_string(), last_name: "Walton".to_string()};
         people.push(my_person);
 
-        FamilyTree{people: people}
+        FamilyTree{people: people, families: families}
     }
 
 
@@ -58,6 +60,11 @@ impl FamilyTree {
                                             println!("\tIndividual Object.");
                                             self.add_individual(&object_lines);
                                         }
+
+                                        GedComObjects::Family => {
+                                            self.families.push(1);
+                                        }
+
                                         _ => {
                                             println!("\tUnknown Object.");
                                         }
@@ -95,6 +102,8 @@ impl FamilyTree {
             }
 
         }
+        println!("There are {} individuals.", self.people.len());
+        println!("There are {} families.", self.families.len());
     }
 }
 
