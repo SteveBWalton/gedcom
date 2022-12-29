@@ -1,2 +1,2 @@
-# gedcom
-A family history object library from a gedcom file.
+# Gedcom
+Generates a family history rust object library from a gedcom file.
