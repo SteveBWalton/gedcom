@@ -43,6 +43,7 @@ impl FamilyTree {
 
     // Open a gedcom file and create objects from it.
     pub fn open(&mut self, file_name: &str) {
+        println!("open('{}')", file_name);
         match std::fs::File::open(file_name) {
             Ok(file) => {
                 let reader = std::io::BufReader::new(file);
@@ -97,7 +98,7 @@ impl FamilyTree {
             }
 
             Err(error) => {
-                println!("Error opening {}", file_name);
+                println!("Error opening '{}'", file_name);
                 println!("{}", error);
             }
 
