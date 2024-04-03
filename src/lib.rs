@@ -1,44 +1,96 @@
 // Attempt create a library that will expose a family tree object library from a gedcom file.
+
+// System modules.
 use std::io::BufRead;
 
 // Application modules.
-mod person;
+mod individual;
+use individual::Individual;
 
 enum GedComObjects {
     Individual,
     Family,
+    Source,
     Media,
     Unknown,
 }
 
 // Member variables for the FamilyTree class.
 pub struct FamilyTree {
-    pub people: Vec<person::Person>,
+    pub individuals: Vec<Individual>,
     pub families: Vec<i32>,             // Change to family::Family
+    pub sources:Vec<i32>,             // Change to
 }
 
 // Methods for the FamilyTree class.
 impl FamilyTree {
     // Create a new 'FamilyTree' structure.
     pub fn new() -> FamilyTree {
-        let mut people = Vec::new();
+        let mut individuals = Vec::new();
         let mut families = Vec::new();
+        let mut sources = Vec::new();
 
-        let my_person = person::Person{first_name: "Steve".to_string(), last_name: "Walton".to_string()};
-        people.push(my_person);
-
-        FamilyTree{people: people, families: families}
+        FamilyTree{individuals: individuals, families: families, sources: sources}
     }
 
 
 
+    // Add an individual to this gedcom from the specified gedcom files lines.
     pub fn add_individual(&mut self, gedcom: &Vec<String>) {
-        println!("add_individual()");
+        let individual = Individual::new(gedcom);
+        // println!("add_individual()");
+        // individual.output_gedcom();
+        self.individuals.push(individual);
+    }
+
+
+
+    // Add a family to this gedcom from the specified gedcom file lines.
+    pub fn add_family(&mut self, gedcom: &Vec<String>) {
+        /*
+        println!("add_family()");
+        for line in gedcom {
+            println!("\t{}", line);
+        }
+        */
+        self.families.push(1);
+    }
+
+
+
+    // Add a source to this gedcom from the specified gedcom file lines.
+    pub fn add_source(&mut self, gedcom: &Vec<String>) {
+        /*
+        println!("add_source()");
+        for line in gedcom {
+            println!("\t{}", line);
+        }
+        */
+        self.sources.push(1);
+    }
+
+
+
+    // Add a media to this gedcom from the specified gedcom file lines.
+    pub fn add_media(&mut self, gedcom: &Vec<String>) {
+        /*
+        println!("add_media()");
+        for line in gedcom {
+            println!("\t{}", line);
+        }
+        */
+        // self.sources.push(1);
+    }
+
+
+
+    // Report the unknown gedcom object.
+    pub fn report_unknown_object(&self, gedcom: &Vec<String>) {
+        println!("Unknown Object.");
         for line in gedcom {
             println!("\t{}", line);
         }
     }
-
 
 
     // Open a gedcom file and create objects from it.
@@ -58,16 +110,23 @@ impl FamilyTree {
                                 if object_lines.len() != 0 {
                                     match object_type {
                                         GedComObjects::Individual => {
-                                            println!("\tIndividual Object.");
                                             self.add_individual(&object_lines);
                                         }
 
                                         GedComObjects::Family => {
-                                            self.families.push(1);
+                                            self.add_family(&object_lines);
+                                        }
+
+                                        GedComObjects::Source => {
+                                            self.add_source(&object_lines);
+                                        }
+
+                                        GedComObjects::Media => {
+                                            self.add_media(&object_lines);
                                         }
 
                                         _ => {
-                                            println!("\tUnknown Object.");
+                                            self.report_unknown_object(&object_lines);
                                         }
                                     }
                                 }
@@ -78,6 +137,10 @@ impl FamilyTree {
                                     object_type = GedComObjects::Individual;
                                 } else if line.ends_with("FAM") {
                                     object_type = GedComObjects::Family;
+                                } else if line.ends_with("SOUR") {
+                                    object_type = GedComObjects::Source;
+                                } else if line.ends_with("OBJE") {
+                                    object_type = GedComObjects::Media;
                                 } else {
                                     object_type = GedComObjects::Unknown;
                                 }
@@ -103,7 +166,7 @@ impl FamilyTree {
             }
 
         }
-        println!("There are {} individuals.", self.people.len());
+        println!("There are {} individuals.", self.individuals.len());
         println!("There are {} families.", self.families.len());
     }
 }
