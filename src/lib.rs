@@ -5,14 +5,16 @@ use std::io::BufRead;
 
 // Application modules.
 mod individual;
-use individual::Individual;
 mod family;
-use family::Family;
 mod source;
-use source::Source;
 mod object;
-use object::Object;
+mod tags;
+mod tag;
 
+use individual::Individual;
+use family::Family;
+use source::Source;
+use object::Object;
 
 
 enum GedComObjects {
@@ -29,8 +31,8 @@ enum GedComObjects {
 pub struct FamilyTree {
     pub individuals: Vec<Individual>,
     pub families: Vec<Family>,
-    pub sources:Vec<Source>,
-    pub objects:Vec<Object>
+    pub sources: Vec<Source>,
+    pub objects: Vec<Object>
 }
 
 
