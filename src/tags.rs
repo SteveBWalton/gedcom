@@ -76,5 +76,36 @@ impl Tags {
         // Build the Tags object.
         Tags { tags: tags }
     }
+
+    // Returns the collection of tags in lines for a gedcom file.
+    pub fn to_gedcom_file(&self) -> Vec<String> {
+        let mut lines: Vec<String> = Vec::new();
+
+        // Add the lines for each tag.
+        for tag in &self.tags {
+            for child_lines in tag.to_gedcom_file()
+            {
+                lines.push(child_lines);
+            }
+        }
+
+        // Return the built lines.
+        return lines;
+    }
+
+    // Returns the collection of tags in decorated html.
+    pub fn to_decorated_html(&self) -> Vec<String> {
+        let mut lines: Vec<String> = Vec::new();
+
+        // Add the lines for each tag.
+        for tag in &self.tags {
+            for child_lines in tag.to_decorated_html()
+            {
+                lines.push(child_lines);
+            }
+        }
+
+        return lines;
+    }
 }
 
