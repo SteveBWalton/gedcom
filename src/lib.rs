@@ -51,9 +51,8 @@ impl FamilyTree {
         let individuals = Vec::new();
         let families = Vec::new();
         let sources = Vec::new();
-        let objects = Vec::new();
 
-        FamilyTree{individuals: individuals, families: families, sources: sources, objects: objects, repos: Vec::new(), tags: Tags::new_empty()}
+        FamilyTree{individuals: individuals, families: families, sources: sources, objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty()}
     }
 
 
@@ -101,13 +100,13 @@ impl FamilyTree {
 
 
     // Add the header information for this gedcom.
-    pub fn add_header(&mut self, gedcom: &Vec<String>) {
+    fn add_header(&mut self, gedcom: &Vec<String>) {
         self.tags = Tags::new(1, gedcom);
     }
 
 
     // Report the unknown gedcom.
-    pub fn report_unknown(&self, gedcom: &Vec<String>) {
+    fn report_unknown(&self, gedcom: &Vec<String>) {
         println!("Unknown.");
         for line in gedcom {
             println!("\t{}", line);

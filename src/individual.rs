@@ -4,6 +4,8 @@
 // Application modules.
 use crate::tags;
 use tags::Tags;
+use crate::tag;
+use tag::Tag;
 
 
 // Members variables for the 'Individual' class.
@@ -12,6 +14,8 @@ pub struct Individual {
     pub gedcom: Vec<String>,
     // The gedcom tags attached to this individual.
     pub tags: Tags,
+    // The index for this individual.
+    pub idx: String,
 }
 
 
@@ -19,12 +23,8 @@ pub struct Individual {
 impl Individual {
     // Initialise a new individual from gedcom data.
     pub fn new(gedcom: &Vec<String>) -> Individual {
-        // Get the index from the first line.
-        // This is expected to be in the form 0 @I0001@ INDI
-        let _first_line = &gedcom[0];
-
         // Make a new individual.
-        Individual { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom) }
+        Individual { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom), idx: Tag::get_index(&gedcom[0]).to_string() }
     }
 
     // Debuging only.

@@ -51,5 +51,24 @@ impl Tag {
         }
         return lines;
     }
+
+    // Return the index from a gedcom object first line.
+    // This should be a trait for all the gedcom objects.
+    pub fn get_index(gedcom: &str) -> &str {
+        match gedcom.find('@') {
+            Some(first_char) => {
+                match gedcom[(first_char+1)..].find('@') {
+                    Some(second_char) => {
+                        // println!("first_char = {}, second_char = {}, index = {}", first_char, second_char, &gedcom[(first_char+1)..(first_char + second_char + 1)]);
+                        return &gedcom[(first_char+1)..(first_char + 1 + second_char)]
+                    }
+                    None => println!("Second @ character not found.")
+                }
+            }
+            None => println!("First @ character not found.")
+        }
+        return "";
+    }
+
 }
 
