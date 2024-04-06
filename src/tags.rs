@@ -17,6 +17,7 @@ pub struct Tags {
 
 // Functions for the Tags structure.
 impl Tags {
+    // Create a tags object from the specified gedcom lines.
     pub fn new(level: usize, gedcom: &Vec<String>) -> Tags {
         // Start a collection to hold these tags.
         let mut tags = Vec::new();
@@ -25,9 +26,9 @@ impl Tags {
         let mut object_lines: Vec<String> = Vec::new();
         let mut current_tag: String = "".to_string();
         let mut current_value: String = "".to_string();
-        let mut line_start = level.to_string();
+        let line_start = level.to_string();
         for line in gedcom {
-            println!("\t{}", line);
+            // println!("\t{}", line);
             if line.starts_with(&line_start)
             {
                 if current_tag != ""
@@ -75,6 +76,11 @@ impl Tags {
 
         // Build the Tags object.
         Tags { tags: tags }
+    }
+
+    // Create an empty tags object.
+    pub fn new_empty() -> Tags {
+        Tags { tags: Vec::new() }
     }
 
     // Returns the collection of tags in lines for a gedcom file.

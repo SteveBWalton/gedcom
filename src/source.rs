@@ -1,20 +1,26 @@
 // Module to define the 'Source' class.
 // Rust does not have classes!
 
-// Members variables for the 'Family' class.
+// Application modules.
+use crate::tags;
+use tags::Tags;
+
+
+
+// Members variables for the 'Source' class.
 pub struct Source {
-    // The gedcom data that created this individual.
+    // The gedcom data that created this source.
     pub gedcom: Vec<String>,
+    // The gedcom tags attached to this Source.
+    pub tags: Tags,
 }
 
 
 
 impl Source {
-    // Initialise a new individual from gedcom data.
+    // Initialise a new source from gedcom data.
     pub fn new(gedcom: &Vec<String>) -> Source {
-        let mut gedcom_copy: Vec<String> = gedcom.to_vec();
-
-        Source { gedcom: gedcom_copy }
+        Source { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom) }
     }
 
     // Debuging only.

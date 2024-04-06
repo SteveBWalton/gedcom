@@ -42,7 +42,7 @@ impl Tag {
     pub fn to_decorated_html(&self) -> Vec<String> {
         let mut lines: Vec<String> = Vec::new();
         let mut space = "".to_string();
-        for _i in (0..self.level-1) {
+        for _i in 0..self.level-1 {
             space += "  ";
         }
         lines.push(format!("{}<b>{}</b> {}", space, self.key, self.value));

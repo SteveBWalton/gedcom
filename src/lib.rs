@@ -8,6 +8,7 @@ mod individual;
 mod family;
 mod source;
 mod object;
+mod repo;
 mod tags;
 mod tag;
 
@@ -15,13 +16,17 @@ use individual::Individual;
 use family::Family;
 use source::Source;
 use object::Object;
+use repo::Repo;
+use tags::Tags;
 
 
 enum GedComObjects {
+    Header,
     Individual,
     Family,
     Source,
     Object,
+    Repo,
     Unknown,
 }
 
@@ -32,7 +37,9 @@ pub struct FamilyTree {
     pub individuals: Vec<Individual>,
     pub families: Vec<Family>,
     pub sources: Vec<Source>,
-    pub objects: Vec<Object>
+    pub objects: Vec<Object>,
+    pub repos: Vec<Repo>,
+    pub tags: Tags
 }
 
 
@@ -41,12 +48,12 @@ pub struct FamilyTree {
 impl FamilyTree {
     // Create a new 'FamilyTree' structure.
     pub fn new() -> FamilyTree {
-        let mut individuals = Vec::new();
-        let mut families = Vec::new();
-        let mut sources = Vec::new();
-        let mut objects = Vec::new();
+        let individuals = Vec::new();
+        let families = Vec::new();
+        let sources = Vec::new();
+        let objects = Vec::new();
 
-        FamilyTree{individuals: individuals, families: families, sources: sources, objects: objects}
+        FamilyTree{individuals: individuals, families: families, sources: sources, objects: objects, repos: Vec::new(), tags: Tags::new_empty()}
     }
 
 
@@ -77,12 +84,26 @@ impl FamilyTree {
 
 
 
-    // Add a media to this gedcom from the specified gedcom file lines.
+    // Add a media object to this gedcom from the specified gedcom file lines.
     pub fn add_object(&mut self, gedcom: &Vec<String>) {
         let object = Object::new(gedcom);
         self.objects.push(object);
     }
 
+
+
+    // Add a repo to this gedcom from the specified gedcom file lines.
+    pub fn add_repo(&mut self, gedcom: &Vec<String>) {
+        let repo = Repo::new(gedcom);
+        self.repos.push(repo);
+    }
+
+
+
+    // Add the header information for this gedcom.
+    pub fn add_header(&mut self, gedcom: &Vec<String>) {
+        self.tags = Tags::new(1, gedcom);
+    }
 
 
     // Report the unknown gedcom.
@@ -126,6 +147,14 @@ impl FamilyTree {
                                             self.add_object(&object_lines);
                                         }
 
+                                        GedComObjects::Repo => {
+                                            self.add_repo(&object_lines);
+                                        }
+
+                                        GedComObjects::Header => {
+                                            self.add_header(&object_lines);
+                                        }
+
                                         _ => {
                                             self.report_unknown(&object_lines);
                                         }
@@ -142,6 +171,10 @@ impl FamilyTree {
                                     object_type = GedComObjects::Source;
                                 } else if line.ends_with("OBJE") {
                                     object_type = GedComObjects::Object;
+                                } else if line.ends_with("REPO") {
+                                    object_type = GedComObjects::Repo;
+                                } else if line.ends_with("HEAD") {
+                                    object_type = GedComObjects::Header;
                                 } else {
                                     object_type = GedComObjects::Unknown;
                                 }
@@ -171,6 +204,7 @@ impl FamilyTree {
         println!("There are {} families.", self.families.len());
         println!("There are {} sources.", self.sources.len());
         println!("There are {} objects.", self.objects.len());
+        println!("There are {} repos.", self.repos.len());
     }
 }
 

@@ -12,9 +12,6 @@ pub struct Individual {
     pub gedcom: Vec<String>,
     // The gedcom tags attached to this individual.
     pub tags: Tags,
-
-    pub first_name: String,
-    pub last_name: String,
 }
 
 
@@ -22,17 +19,12 @@ pub struct Individual {
 impl Individual {
     // Initialise a new individual from gedcom data.
     pub fn new(gedcom: &Vec<String>) -> Individual {
-        // Make a copy of the gedcom line for this individual.
-        let mut gedcom_copy: Vec<String> = gedcom.to_vec();
-
         // Get the index from the first line.
-        let first_line = gedcom_copy.remove(0);
-
-        // Make the gedcom tags for this individual.
-        let mut tags = Tags::new(1, gedcom);
+        // This is expected to be in the form 0 @I0001@ INDI
+        let _first_line = &gedcom[0];
 
         // Make a new individual.
-        Individual { gedcom: gedcom.to_vec(), tags: tags, first_name: "Steve".to_string(), last_name: "Walton".to_string() }
+        Individual { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom) }
     }
 
     // Debuging only.

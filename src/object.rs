@@ -1,20 +1,25 @@
 // Module to define the 'Object' class.
 // Rust does not have classes!
 
-// Members variables for the 'Family' class.
+// Application modules.
+use crate::tags;
+use tags::Tags;
+
+
+// Members variables for the media object class.
 pub struct Object {
-    // The gedcom data that created this individual.
+    // The gedcom data that created this media object.
     pub gedcom: Vec<String>,
+    // The gedcom tags attached to this media object.
+    pub tags: Tags,
 }
 
 
 
 impl Object {
-    // Initialise a new individual from gedcom data.
+    // Initialise a new media object from gedcom data.
     pub fn new(gedcom: &Vec<String>) -> Object {
-        let mut gedcom_copy: Vec<String> = gedcom.to_vec();
-
-        Object { gedcom: gedcom_copy }
+        Object { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom) }
     }
 
     // Debuging only.
