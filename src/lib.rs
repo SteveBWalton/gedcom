@@ -2,6 +2,7 @@
 
 // System modules.
 use std::io::BufRead;
+use std::collections::HashMap;
 
 // Application modules.
 mod individual;
@@ -39,7 +40,9 @@ pub struct FamilyTree {
     pub sources: Vec<Source>,
     pub objects: Vec<Object>,
     pub repos: Vec<Repo>,
-    pub tags: Tags
+    pub tags: Tags,
+
+    idx_individuals: HashMap<String, usize>
 }
 
 
@@ -50,9 +53,8 @@ impl FamilyTree {
     pub fn new() -> FamilyTree {
         let individuals = Vec::new();
         let families = Vec::new();
-        let sources = Vec::new();
 
-        FamilyTree{individuals: individuals, families: families, sources: sources, objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty()}
+        FamilyTree{individuals: individuals, families: families, sources: Vec::new(), objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty(), idx_individuals: HashMap::new()}
     }
 
 
@@ -62,10 +64,21 @@ impl FamilyTree {
         let individual = Individual::new(gedcom);
         // println!("add_individual()");
         // individual.output_gedcom();
+        let idx: String = individual.idx.to_string();
         self.individuals.push(individual);
+        self.idx_individuals.entry(idx).or_insert(self.individuals.len() - 1);
     }
 
-
+    // Return the individual with the specified index.
+    pub fn get_individual(&self, idx: &str) -> &Individual {
+        match self.idx_individuals.get(idx) {
+           Some(i) => return &self.individuals[*i],
+           None => {
+               println!("get_individual did not work.");
+               return &self.individuals[0];
+           }
+        }
+    }
 
     // Add a family to this gedcom from the specified gedcom file lines.
     pub fn add_family(&mut self, gedcom: &Vec<String>) {
