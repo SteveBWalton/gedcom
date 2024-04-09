@@ -4,6 +4,8 @@
 // Application modules.
 use crate::tags;
 use tags::Tags;
+use crate::tag;
+use tag::Tag;
 
 
 
@@ -13,6 +15,8 @@ pub struct Source {
     pub gedcom: Vec<String>,
     // The gedcom tags attached to this Source.
     pub tags: Tags,
+    // The index for this source.
+    pub idx: String,
 }
 
 
@@ -20,7 +24,7 @@ pub struct Source {
 impl Source {
     // Initialise a new source from gedcom data.
     pub fn new(gedcom: &Vec<String>) -> Source {
-        Source { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom) }
+        Source { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom), idx: Tag::get_index(&gedcom[0]).to_string() }
     }
 
     // Debuging only.

@@ -35,6 +35,7 @@ enum GedComObjects {
 
 // Member variables for the FamilyTree class.
 pub struct FamilyTree {
+    // The collection of gedcom objects.
     pub individuals: Vec<Individual>,
     pub families: Vec<Family>,
     pub sources: Vec<Source>,
@@ -42,7 +43,10 @@ pub struct FamilyTree {
     pub repos: Vec<Repo>,
     pub tags: Tags,
 
-    idx_individuals: HashMap<String, usize>
+    // Indexes into the gedcom objects.
+    idx_individuals: HashMap<String, usize>,
+    idx_families: HashMap<String, usize>,
+    idx_sources: HashMap<String, usize>
 }
 
 
@@ -51,10 +55,7 @@ pub struct FamilyTree {
 impl FamilyTree {
     // Create a new 'FamilyTree' structure.
     pub fn new() -> FamilyTree {
-        let individuals = Vec::new();
-        let families = Vec::new();
-
-        FamilyTree{individuals: individuals, families: families, sources: Vec::new(), objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty(), idx_individuals: HashMap::new()}
+        FamilyTree{individuals: Vec::new(), families: Vec::new(), sources: Vec::new(), objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty(), idx_individuals: HashMap::new(), idx_families: HashMap::new(), idx_sources: HashMap::new()}
     }
 
 
@@ -74,7 +75,7 @@ impl FamilyTree {
         match self.idx_individuals.get(idx) {
            Some(i) => return &self.individuals[*i],
            None => {
-               println!("get_individual did not work.");
+               println!("get_individual() did not work.");
                return &self.individuals[0];
            }
         }
@@ -83,17 +84,39 @@ impl FamilyTree {
     // Add a family to this gedcom from the specified gedcom file lines.
     pub fn add_family(&mut self, gedcom: &Vec<String>) {
         let family = Family::new(gedcom);
+        let idx = family.idx.to_string();
         self.families.push(family);
+        self.idx_families.entry(idx).or_insert(self.families.len() - 1);
     }
 
-
+    pub fn get_family(&self, idx: &str) -> &Family {
+        match self.idx_families.get(idx) {
+            Some(i) => return &self.families[*i],
+            None => {
+                println!("get_family() did not work.");
+                return &self.families[0];
+            }
+        }
+    }
 
     // Add a source to this gedcom from the specified gedcom file lines.
     pub fn add_source(&mut self, gedcom: &Vec<String>) {
         let source = Source::new(gedcom);
+        let idx = source.idx.to_string();
         self.sources.push(source);
+        self.idx_sources.entry(idx).or_insert(self.sources.len() - 1);
     }
 
+    // Return the individual with the specified index.
+    pub fn get_source(&self, idx: &str) -> &Source {
+        match self.idx_sources.get(idx) {
+           Some(i) => return &self.sources[*i],
+           None => {
+               println!("get_source() did not work.");
+               return &self.sources[0];
+           }
+        }
+    }
 
 
     // Add a media object to this gedcom from the specified gedcom file lines.
