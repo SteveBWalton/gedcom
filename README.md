@@ -1,7 +1,8 @@
 # Gedcom
 Generates a family history rust object library from a gedcom file.
+Currently only views the gedcom file.
+Plan to add editing and saving in future.
 
-# This does not work [Yet]
 
 ## How to Run
 
