@@ -46,7 +46,8 @@ pub struct FamilyTree {
     // Indexes into the gedcom objects.
     idx_individuals: HashMap<String, usize>,
     idx_families: HashMap<String, usize>,
-    idx_sources: HashMap<String, usize>
+    idx_sources: HashMap<String, usize>,
+    idx_objects: HashMap<String, usize>
 }
 
 
@@ -55,7 +56,7 @@ pub struct FamilyTree {
 impl FamilyTree {
     // Create a new 'FamilyTree' structure.
     pub fn new() -> FamilyTree {
-        FamilyTree{individuals: Vec::new(), families: Vec::new(), sources: Vec::new(), objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty(), idx_individuals: HashMap::new(), idx_families: HashMap::new(), idx_sources: HashMap::new()}
+        FamilyTree{individuals: Vec::new(), families: Vec::new(), sources: Vec::new(), objects: Vec::new(), repos: Vec::new(), tags: Tags::new_empty(), idx_individuals: HashMap::new(), idx_families: HashMap::new(), idx_sources: HashMap::new(), idx_objects: HashMap::new()}
     }
 
 
@@ -118,14 +119,24 @@ impl FamilyTree {
         }
     }
 
-
     // Add a media object to this gedcom from the specified gedcom file lines.
     pub fn add_object(&mut self, gedcom: &Vec<String>) {
         let object = Object::new(gedcom);
+        let idx = object.idx.to_string();
         self.objects.push(object);
+        self.idx_objects.entry(idx).or_insert(self.objects.len() - 1);
     }
 
-
+    // Return the media object with the specified index.
+    pub fn get_object(&self, idx: &str) -> &Object {
+        match self.idx_objects.get(idx) {
+            Some(i) => return &self.objects[*i],
+            None => {
+                println!("get_object() did not work.");
+                return &self.objects[0];
+            }
+        }
+    }
 
     // Add a repo to this gedcom from the specified gedcom file lines.
     pub fn add_repo(&mut self, gedcom: &Vec<String>) {
