@@ -249,7 +249,7 @@ impl FamilyTree {
         println!("There are {} individuals.", self.individuals.len());
         println!("There are {} families.", self.families.len());
         println!("There are {} sources.", self.sources.len());
-        println!("There are {} objects.", self.objects.len());
+        println!("There are {} media objects.", self.objects.len());
         println!("There are {} repos.", self.repos.len());
     }
 }
