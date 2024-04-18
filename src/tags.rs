@@ -113,5 +113,15 @@ impl Tags {
 
         return lines;
     }
+
+    // Return one tag than matches the specified key.
+    pub fn find_one(&self, key: &str) -> Option<&Tag> {
+        for tag in &self.tags {
+            if tag.key == key {
+                return Some(tag);
+            }
+        }
+        None
+    }
 }
 
