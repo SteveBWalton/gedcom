@@ -22,7 +22,7 @@ pub struct Family {
 
 
 impl Family {
-    // Initialise a new individual from gedcom data.
+    // Initialise a new family from gedcom data.
     pub fn new(gedcom: &Vec<String>) -> Family {
         Family { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom), idx: Tag::get_index(&gedcom[0]).to_string() }
     }
