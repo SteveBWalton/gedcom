@@ -27,6 +27,19 @@ impl Individual {
         Individual { gedcom: gedcom.to_vec(), tags: Tags::new(1, gedcom), idx: Tag::get_index(&gedcom[0]).to_string() }
     }
 
+    // Do something better than this later.
+    pub fn get_name(&self) -> Option<&str> {
+        match self.tags.find_one("NAME") {
+            Some(tag) => {
+                return Some(&tag.value);
+            }
+            None => {
+                return None;
+            }
+        }
+    }
+
+
     // Debuging only.
     pub fn output_gedcom(&self) {
         for line in &self.gedcom {
