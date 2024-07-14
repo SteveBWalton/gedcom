@@ -16,7 +16,7 @@ pub struct Tag {
     // The value of this tag.
     pub value: String,
 
-    // The child tags of this tag.
+    // The children tags of this tag.
     pub tags: Tags
 }
 
