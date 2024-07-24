@@ -2,6 +2,7 @@
 Generates a family history rust object library from a gedcom file.
 Currently only views the gedcom file.
 Plan to add editing and saving in future.
+Should work under Linux and Windows.
 
 ## How to Run
 
